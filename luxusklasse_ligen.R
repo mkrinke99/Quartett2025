@@ -3,7 +3,8 @@
 
 #Daten----------
 library(readxl)
-df <- read_excel("C:/Nerdzeug_backup/quartett/luxusklasse.xlsx")
+library(dplyr)
+dx <- read_excel("C:/Nerdzeug_backup/quartett/luxusklasse.xlsx")
 
 
 
@@ -66,13 +67,13 @@ dx$natcol2[dx$land==   "US"]<- "dodgerblue2"
 
 
 #Liga subsets------
-q1<- dx[dx$league== 1 & dx$exp %in% c(0.2,0.5,0.7),]
-q2a<- dx[dx$league== 2 & dx$exp %in% c(0.2,0.5,0.7),]
-q2<- q2a[!(q2a$name %in% q1$name),]
-q3a<- dx[dx$league== 3 & dx$exp %in% c(0.2,0.5,0.7),]
-q3<- q3a[!(q3a$name %in% q2$name),]
-q2e<- dx[dx$league== 2 & dx$exp > 0.4,]
-d<- rbind(q1, q2, q3)
+q1<-  dx|>  filter(league == 1, exp %in% c(0.2, 0.5, 0.7))
+q2<-  dx|>  filter(league == 2, exp %in% c(0.2, 0.5, 0.7))  |>  filter(!(name %in% q1$name))
+q3<-  dx|>  filter(league == 3, exp %in% c(0.2, 0.5, 0.7))  |>  filter(!(name %in% q2$name))
+
+q2e<- dx[dx$league== 2 & dx$exp > 0.4,] #Liga 2 Elite
+
+d<- rbind(q1, q2, q3) #Ohne Dublikate
 
 
 
